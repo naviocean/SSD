@@ -5,20 +5,25 @@ from .voc import VOCDataset
 from .coco import COCODataset
 
 _DATASETS = {
-    'VOCDataset': VOCDataset,
-    'COCODataset': COCODataset,
+    'VOC': VOCDataset,
+    'COCO': COCODataset,
 }
 
 
-def build_dataset(dataset_list, transform=None, target_transform=None, is_train=True):
+def build_dataset(cfg, transform=None, target_transform=None, is_train=True):
+    dataset_list = cfg.DATASETS.TRAIN if is_train else cfg.DATASETS.TEST
     assert len(dataset_list) > 0
     datasets = []
-    for dataset_name in dataset_list:
-        data = DatasetCatalog.get(dataset_name)
-        args = data['args']
-        factory = _DATASETS[data['factory']]
-        args['transform'] = transform
-        args['target_transform'] = target_transform
+    for split in dataset_list:
+        args = dict(
+            data_dir=cfg.DATASETS.DATA_DIR,
+            split=split,
+            class_names=cfg.MODEL.CLASSES,
+            transform=transform,
+            target_transform=target_transform
+        )
+        factory = _DATASETS[cfg.DATASETS.TYPE]
+
         if factory == VOCDataset:
             args['keep_difficult'] = not is_train
         elif factory == COCODataset:

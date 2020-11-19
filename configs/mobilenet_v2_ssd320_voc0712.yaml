@@ -1,10 +1,11 @@
 MODEL:
-  NUM_CLASSES: 21
+  CLASSES: ("face", "face_mask",)
   BOX_HEAD:
-    PREDICTOR: 'SSDLiteBoxPredictor'
+    PREDICTOR: "SSDLiteBoxPredictor"
   BACKBONE:
-    NAME: 'mobilenet_v2'
+    NAME: "mobilenet_v2"
     OUT_CHANNELS: (96, 1280, 512, 256, 256, 64)
+    PRETRAINED: True
   PRIORS:
     FEATURE_MAPS: [20, 10, 5, 3, 2, 1]
     STRIDES: [16, 32, 64, 107, 160, 320]
@@ -15,13 +16,15 @@ MODEL:
 INPUT:
   IMAGE_SIZE: 320
 DATASETS:
-  TRAIN: ("voc_2007_trainval", "voc_2012_trainval")
-  TEST: ("voc_2007_test", )
+  TRAIN: ("train",)
+  TEST: ("val", )
+  TYPE: "VOC" # VOC or COCO
+  DATA_DIR: "./data/fm"
 SOLVER:
-  MAX_ITER: 120000
-  LR_STEPS: [80000, 100000]
+  MAX_ITER: 90000
+  LR_STEPS: [50000, 80000]
   GAMMA: 0.1
   BATCH_SIZE: 32
   LR: 1e-3
 
-OUTPUT_DIR: 'outputs/mobilenet_v2_ssd320_voc0712'
+OUTPUT_DIR: "outputs/mobilenet_v2_ssd320_voc0712"

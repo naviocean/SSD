@@ -7,7 +7,22 @@ _C.MODEL.META_ARCHITECTURE = 'SSDDetector'
 _C.MODEL.DEVICE = "cuda"
 # match default boxes to any ground truth with jaccard overlap higher than a threshold (0.5)
 _C.MODEL.THRESHOLD = 0.5
-_C.MODEL.NUM_CLASSES = 21
+_C.MODEL.CLASSES = ('__background__',
+                    'person', 'bicycle', 'car', 'motorcycle', 'airplane', 'bus',
+                    'train', 'truck', 'boat', 'traffic light', 'fire hydrant',
+                    'stop sign', 'parking meter', 'bench', 'bird', 'cat', 'dog',
+                    'horse', 'sheep', 'cow', 'elephant', 'bear', 'zebra',
+                    'giraffe', 'backpack', 'umbrella', 'handbag', 'tie',
+                    'suitcase', 'frisbee', 'skis', 'snowboard', 'sports ball',
+                    'kite', 'baseball bat', 'baseball glove', 'skateboard',
+                    'surfboard', 'tennis racket', 'bottle', 'wine glass', 'cup',
+                    'fork', 'knife', 'spoon', 'bowl', 'banana', 'apple',
+                    'sandwich', 'orange', 'broccoli', 'carrot', 'hot dog', 'pizza',
+                    'donut', 'cake', 'chair', 'couch', 'potted plant', 'bed',
+                    'dining table', 'toilet', 'tv', 'laptop', 'mouse', 'remote',
+                    'keyboard', 'cell phone', 'microwave', 'oven', 'toaster', 'sink',
+                    'refrigerator', 'book', 'clock', 'vase', 'scissors',
+                    'teddy bear', 'hair drier', 'toothbrush',)
 # Hard negative mining
 _C.MODEL.NEG_POS_RATIO = 3
 _C.MODEL.CENTER_VARIANCE = 0.1
@@ -32,7 +47,8 @@ _C.MODEL.PRIORS.MAX_SIZES = [60, 111, 162, 213, 264, 315]
 _C.MODEL.PRIORS.ASPECT_RATIOS = [[2], [2, 3], [2, 3], [2, 3], [2], [2]]
 # When has 1 aspect ratio, every location has 4 boxes, 2 ratio 6 boxes.
 # #boxes = 2 + #ratio * 2
-_C.MODEL.PRIORS.BOXES_PER_LOCATION = [4, 6, 6, 6, 4, 4]  # number of boxes per feature map location
+# number of boxes per feature map location
+_C.MODEL.PRIORS.BOXES_PER_LOCATION = [4, 6, 6, 6, 4, 4]
 _C.MODEL.PRIORS.CLIP = True
 
 # -----------------------------------------------------------------------------
@@ -49,7 +65,9 @@ _C.INPUT = CN()
 # Image size
 _C.INPUT.IMAGE_SIZE = 300
 # Values to be used for image normalization, RGB layout
-_C.INPUT.PIXEL_MEAN = [123, 117, 104]
+# _C.INPUT.PIXEL_MEAN = [123, 117, 104]
+_C.INPUT.MEAN = [127, 127, 127]
+_C.INPUT.STD = [128.0]
 
 # -----------------------------------------------------------------------------
 # Dataset
@@ -59,7 +77,8 @@ _C.DATASETS = CN()
 _C.DATASETS.TRAIN = ()
 # List of the dataset names for testing, as present in paths_catalog.py
 _C.DATASETS.TEST = ()
-
+_C.DATASETS.TYPE = "VOC"
+_C.DATASETS.DATA_DIR = "./data/VOC_ROOT"
 # -----------------------------------------------------------------------------
 # DataLoader
 # -----------------------------------------------------------------------------
@@ -90,7 +109,7 @@ _C.TEST = CN()
 _C.TEST.NMS_THRESHOLD = 0.45
 _C.TEST.CONFIDENCE_THRESHOLD = 0.01
 _C.TEST.MAX_PER_CLASS = -1
-_C.TEST.MAX_PER_IMAGE = 100
+_C.TEST.MAX_PER_IMAGE = 500
 _C.TEST.BATCH_SIZE = 10
 
 _C.OUTPUT_DIR = 'outputs'
